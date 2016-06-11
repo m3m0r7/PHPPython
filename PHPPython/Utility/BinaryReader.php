@@ -24,6 +24,9 @@ class BinaryReader {
      * @return string
      */
     public function readByte ($bytes = 1) {
+        if ($bytes === 0) {
+            return '';
+        }
         return fread($this->_handle, $bytes);
     }
 
@@ -41,6 +44,13 @@ class BinaryReader {
      */
     public function readLong () {
         return $this->_unpackBinary('V', 4);
+    }
+
+    /**
+     * check file teminated
+     */
+    public function isTerminated () {
+        return feof($this->_handle);
     }
 
     /**

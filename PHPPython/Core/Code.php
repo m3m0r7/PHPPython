@@ -8,27 +8,35 @@ require_once __DIR__ . '/../Utility/BinaryReader.php';
 
 class Code {
 
-    private $_codeHandle    = null;
-    private $_marshalType    = null;
-    private $_argumentCount  = null;
-    private $_localCount     = null;
-    private $_stackSize      = null;
-    private $_flags          = null;
+    private $_argcount      = null;
+    private $_nlocals       = null;
+    private $_stackSize     = null;
+    private $_flags         = null;
+    private $_code          = null;
+    private $_consts        = null;
+    private $_names         = null;
+    private $_varnames      = null;
+    private $_freevars      = null;
+    private $_cellvars      = null;
+    private $_filename      = null;
+    private $_name          = null;
+    private $_firstlineno   = null;
+    private $_lnotab        = null;
 
     /**
      * init python bytecode
      * @param string|fileResource disassemble python bytecode
      */
     public function __construct ($codeHandle = null) {
-        if ($codeHandle instanceof \PHPPython\PHPPython) {
+        if ($codeHandle instanceof \PHPPython\PHPPython || $codeHandle instanceof \PHPPython\Code) {
             $this->_codeHandle = (clone $codeHandle)->getHandle();
-            $this->_disAssemble();
+            $this->_load($this->_codeHandle);
             return;
         } else if (is_string($codeHandle)) {
             $this->_codeHandle = fopen('php://memory', 'wb');
             fwrite($this->_codeHandle, $codeHandle);
             rewind($this->_codeHandle);
-            $this->_disAssemble();
+            $this->_load($this->_codeHandle);
             return;
         }
         throw new Exception\CodeException('Error loading code');
@@ -36,17 +44,29 @@ class Code {
 
     /**
      * dis assemble python bytecode
-     * @return void
+     * @return mixed
      */
-    private function _disAssemble () {
-        $binaryReader = new Utility\BinaryReader($this->_codeHandle);
+    private function _load ($handle) {
+        $binaryReader = new Utility\BinaryReader($handle);
         $this->_marshalType = $binaryReader->readByte();
         switch ($this->_marshalType) {
             case 'c':
-                $this->_argumentCount = $binaryReader->readLong();
-                $this->_localCount = $binaryReader->readLong();
+                $this->_argcount = $binaryReader->readLong();
+                $this->_nlocals = $binaryReader->readLong();
                 $this->_stackSize = $binaryReader->readLong();
                 $this->_flags = $binaryReader->readLong();
+                $this->_code = $this->_load($handle);
+                $this->_consts = $this->_load($handle);
+                $this->_names = $this->_load($handle);
+                $this->_varnames = $this->_load($handle);
+                $this->_freevars = $this->_load($handle);
+                $this->_cellvars = $this->_load($handle);
+                $this->_filename = $this->_load($handle);
+                $this->_name = $this->_load($handle);
+                $this->_firstlineno = $binaryReader->readLong();
+                $this->_lnotab = $this->_load($handle);
+
+                // read nested code
                 return;
             case '.':
                 // coming soon...
@@ -55,14 +75,11 @@ class Code {
                 // coming soon...
                 return;
             case 'N':
-                // coming soon...
-                return;
+                return null;
             case 'T':
-                // coming soon...
-                return;
+                return true;
             case 'F':
-                // coming soon...
-                return;
+                return false;
             case 'S':
                 // coming soon...
                 return;
@@ -91,17 +108,22 @@ class Code {
                 // coming soon...
                 return;
             case 's':
-                // coming soon...
-                return;
+                $codeSize = $binaryReader->readLong();
+                return $binaryReader->readByte($codeSize);
             case 't':
-                // coming soon...
-                return;
+                $size = $binaryReader->readLong();
+                return $binaryReader->readByte($size);
             case 'u':
                 // coming soon...
                 return;
             case '(':
-                // coming soon...
-                return;
+                $tupleSize = $binaryReader->readLong();
+                $tuple = [];
+                while ($tupleSize > 0) {
+                    $tuple[] = $this->_load($handle);
+                    $tupleSize--;
+                };
+                return $tuple;
             case '[':
                 // coming soon...
                 return;
