@@ -1,0 +1,76 @@
+<?php
+
+namespace PHPPython\Enum;
+
+class OPCode {
+    const STOP_CODE 				= 0x000000;
+    const POP_TOP 				    = 0x000001;
+    const ROT_TWO 				    = 0x000002;
+    const ROT_THREE 				= 0x000003;
+    const DUP_TOP 				    = 0x000004;
+    const ROT_FOUR 				    = 0x000005;
+    const NOP 				        = 0x000009;
+    const LIST_APPEND 				= 0x000012;
+    const BINARY_POWER 				= 0x000013;
+    const BINARY_MULTIPLY 			= 0x000014;
+    const BINARY_DIVIDE 			= 0x000015;
+    const BINARY_MODULO 			= 0x000016;
+    const BINARY_ADD 				= 0x000017;
+    const BINARY_SUBTRACT 			= 0x000018;
+    const BINARY_SUBSCR 			= 0x000019;
+    const SLICE_2 				    = 0x000020;
+    const SLICE_3 				    = 0x000021;
+    const STORE_SLICE 				= 0x000028;
+    const STORE_SLICE_1 			= 0x000029;
+    const DELETE_SLICE 				= 0x000032;
+    const DELETE_SLICE_1 			= 0x000033;
+    const DELETE_SLICE_2 			= 0x000034;
+    const DELETE_SLICE_3 			= 0x000035;
+    const INPLACE_ADD 				= 0x000037;
+    const INPLACE_SUBTRACT 			= 0x000038;
+    const INPLACE_MULTIPLY 			= 0x000039;
+    const BINARY_AND 				= 0x000040;
+    const BINARY_XOR 				= 0x000041;
+    const BINARY_OR 				= 0x000042;
+    const INPLACE_POWER 			= 0x000043;
+    const GET_ITER 				    = 0x000044;
+    const PRINT_EXPR 				= 0x000046;
+    const PRINT_ITEM 				= 0x000047;
+    const PRINT_NEWLINE 			= 0x000048;
+    const PRINT_ITEM_TO 			= 0x000049;
+    const BREAK_LOOP 				= 0x000050;
+    const WITH_CLEANUP 				= 0x000051;
+    const LOAD_LOCALS 				= 0x000052;
+    const RETURN_VALUE 				= 0x000053;
+    const IMPORT_STAR 				= 0x000054;
+    const EXEC_STMT 				= 0x000055;
+    const YIELD_VALUE 				= 0x000056;
+    const POP_BLOCK 				= 0x000057;
+    const END_FINALLY 				= 0x000058;
+    const BUILD_CLASS 				= 0x000059;
+    const DELETE_ATTR 				= 0x000060;
+    const STORE_GLOBAL 				= 0x000061;
+    const DELETE_GLOBAL 			= 0x000062;
+    const DUP_TOPX 				    = 0x000063;
+    const LOAD_CONST 				= 0x000064;
+    const LOAD_NAME 				= 0x000065;
+    const BUILD_TUPLE 				= 0x000066;
+    const BUILD_LIST 				= 0x000067;
+    const BUILD_MAP 				= 0x000068;
+    const LOAD_ATTR 				= 0x000069;
+    const JUMP_IF_TRUE 				= 0x000070;
+    const JUMP_ABSOLUTE 			= 0x000071;
+    const LOAD_GLOBAL 				= 0x000074;
+    const CONTINUE_LOOP 			= 0x000077;
+    const SETUP_LOOP 				= 0x000078;
+    const SETUP_EXCEPT 				= 0x000079;
+    const RAISE_VARARGS 			= 0x000082;
+    const CALL_FUNCTION 			= 0x000083;
+    const MAKE_FUNCTION 			= 0x000084;
+    const BUILD_SLICE 				= 0x000085;
+    const MAKE_CLOSURE 				= 0x000086;
+    const LOAD_CLOSURE 				= 0x000087;
+    const LOAD_DEREF 				= 0x000088;
+    const STORE_DEREF 				= 0x000089;
+
+}
