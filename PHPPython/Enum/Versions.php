@@ -1,8 +1,9 @@
 <?php
 
 namespace PHPPython\Enum;
+require_once __DIR__ . '/Enum.php';
 
-class Version {
+class Version extends \PHPPython\Enum {
     public static function get (int $version) {
         switch ($version) {
             case 20121:

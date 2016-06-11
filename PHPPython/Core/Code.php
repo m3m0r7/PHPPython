@@ -2,7 +2,6 @@
 
 namespace PHPPython;
 
-require_once __DIR__ . '/../Enum/Opcodes.php';
 require_once __DIR__ . '/../Exception/CodeException.php';
 require_once __DIR__ . '/../Utility/BinaryReader.php';
 
@@ -40,6 +39,13 @@ class Code {
             return;
         }
         throw new Exception\CodeException('Error loading code');
+    }
+
+    public function __get ($key) {
+        // load magic vars
+        if (isset($this->{'_' . $key})) {
+            return $this->{'_' . $key};
+        }
     }
 
     /**
@@ -108,8 +114,8 @@ class Code {
                 // coming soon...
                 return;
             case 's':
-                $codeSize = $binaryReader->readLong();
-                return $binaryReader->readByte($codeSize);
+                $size = $binaryReader->readLong();
+                return $binaryReader->readByte($size);
             case 't':
                 $size = $binaryReader->readLong();
                 return $binaryReader->readByte($size);

@@ -1,8 +1,9 @@
 <?php
 
 namespace PHPPython\Enum;
+require_once __DIR__ . '/Enum.php';
 
-class OPCode {
+class OpCode extends \PHPPython\Enum {
     const STOP_CODE 				= 0x000000;
     const POP_TOP 				    = 0x000001;
     const ROT_TWO 				    = 0x000002;
