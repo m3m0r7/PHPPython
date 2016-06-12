@@ -29,7 +29,6 @@ class Invoker {
         while (!$binaryReader->isTerminated()) {
 
             $readOpCode = ord($binaryReader->readByte());
-            var_dump($readOpCode);
             $mnemonic = '\\PHPPython\\Code\\Operator\\' . $opcode->getName($readOpCode);
 
             // exec operator
