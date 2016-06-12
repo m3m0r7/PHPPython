@@ -6,7 +6,7 @@ require_once __DIR__ . '/Operator.php';
 
 class Invoker {
 
-    private $_code = null;
+    protected $_code = null;
 
     public function __construct (\PHPPython\Code $code) {
         $this->_code = $code;
@@ -18,13 +18,31 @@ class Invoker {
     }
 
     public function invoke () {
-        $codeLength = strlen($this->_code->code);
+        $codeHandle = fopen('php://memory', 'wb');
+        fwrite($codeHandle, $this->_code->code);
+        rewind($codeHandle);
+        $binaryReader = new \PHPPython\Utility\BinaryReader($codeHandle);
+
         $opcode = new \PHPPython\Enum\OpCode();
-        for ($i = 0; $i < $codeLength; $i++) {
-            $byteCode = ord($this->_code->code[$i]);
-            $mnemonic = '\\PHPPython\\Code\\Operator\\' . $opcode->getName($byteCode);
-            (new $mnemonic($this))->exec();
+        $stacks = [];
+
+        while (!$binaryReader->isTerminated()) {
+
+            $readOpCode = ord($binaryReader->readByte());
+            $mnemonic = '\\PHPPython\\Code\\Operator\\' . $opcode->getName($readOpCode);
+
+            // exec operator
+            $returnValue = (new $mnemonic($this, $stacks, $binaryReader))->exec();
+
+            if ($readOpCode === \PHPPython\Enum\OpCode::RETURN_VALUE) {
+                return $returnValue;
+            }
+
         }
+    }
+
+    public function getCodeObject () {
+        return $this->_code;
     }
 
 }

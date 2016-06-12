@@ -7,6 +7,7 @@ class RETURN_VALUE extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $value = array_pop($this->_stacks);
+        return $value;
     }
 }

@@ -7,6 +7,7 @@ class LOAD_CONST extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $address = $this->_binaryReader->readShort();
+        $this->_stacks[] = $this->_invoker->getCodeObject()->consts[$address];
     }
 }

@@ -7,6 +7,6 @@ class STOP_CODE extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        throw new \PHPPython\Exception\CodeException('System Error!');
     }
 }

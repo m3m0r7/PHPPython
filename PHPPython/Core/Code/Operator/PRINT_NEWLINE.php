@@ -7,6 +7,6 @@ class PRINT_NEWLINE extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        echo PHP_EOL;
     }
 }
