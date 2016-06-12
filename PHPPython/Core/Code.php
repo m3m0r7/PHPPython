@@ -49,15 +49,19 @@ class Code {
     public function __get ($key) {
         // load magic vars
         if (isset($this->{'_' . $key})) {
-            if (!is_array($this->{'_' . $key})) {
-                return $this->{'_' . $key};
-            }
-            $class = new class extends \ArrayObject {
-                public function store ($address, $value) {
-                    parent::offsetSet($address, $value);
-                }
-            };
-            return new $class($this->{'_' . $key});
+            return $this->{'_' . $key};
+        }
+    }
+
+    /**
+     * set private variant
+     * @param  string $key
+     * @return mixed
+     */
+    public function __set ($key, $value) {
+        // load magic vars
+        if (isset($this->{'_' . $key})) {
+            $this->{'_' . $key} = $value;
         }
     }
 

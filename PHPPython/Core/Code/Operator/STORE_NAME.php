@@ -9,7 +9,7 @@ class STORE_NAME extends \PHPPython\Code\Operator {
     public function exec () {
 
         $address = $this->_binaryReader->readShort();
-        $this->_invoker->getCodeObject()->names->store($address, array_pop($this->_stacks));
-
+        $value = array_pop($this->_stacks);
+        $this->_invoker->getCodeObject()->names[$address] = $value;
     }
 }
