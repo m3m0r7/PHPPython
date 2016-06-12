@@ -27,14 +27,20 @@ class Code {
      * @param string|fileResource disassemble python bytecode
      */
     public function __construct ($codeHandle = null) {
-        if ($codeHandle instanceof \PHPPython\PHPPython || $codeHandle instanceof \PHPPython\Code) {
-            $this->_codeHandle = (clone $codeHandle)->getHandle();
+        if ($codeHandle instanceof \PHPPython\PHPPython) {
+            $_codeHandle = (clone $codeHandle)->getHandle();
+            $this->_load($_codeHandle);
+            return;
+        } else if ($codeHandle instanceof \PHPPython\Code) {
+            $_codeHandle = fopen('php://memory', 'wb');
+            fwrite($_codeHandle, $codeHandle->code);
+            rewind($_codeHandle);
             $this->_load($this->_codeHandle);
             return;
         } else if (is_string($codeHandle)) {
-            $this->_codeHandle = fopen('php://memory', 'wb');
-            fwrite($this->_codeHandle, $codeHandle);
-            rewind($this->_codeHandle);
+            $_codeHandle = fopen('php://memory', 'wb');
+            fwrite($_codeHandle, $codeHandle);
+            rewind($_codeHandle);
             $this->_load($this->_codeHandle);
             return;
         }
@@ -48,20 +54,15 @@ class Code {
      */
     public function __get ($key) {
         // load magic vars
-        if (isset($this->{'_' . $key})) {
+        if ($key[0] !== '_' && isset($this->{'_' . $key})) {
             return $this->{'_' . $key};
         }
     }
 
-    /**
-     * set private variant
-     * @param  string $key
-     * @return mixed
-     */
-    public function __set ($key, $value) {
-        // load magic vars
-        if (isset($this->{'_' . $key})) {
-            $this->{'_' . $key} = $value;
+    public function __call ($name, $arguments) {
+        if (preg_match('/\Astore([A-Z][a-z0-9_]*)\Z/', $name, $methodName)) {
+            $methodName = '_' . strtolower($methodName[1]);
+            $this->{$methodName}[$arguments[0]] = $arguments[1];
         }
     }
 
@@ -71,7 +72,8 @@ class Code {
      * @return boolean
      */
     public function __isset ($key) {
-        return isset($this->{'_' . $key});
+        $key = '_' . $key;
+        return property_exists($this, $key) && $this->$key !== null;
     }
 
     /**
@@ -80,8 +82,8 @@ class Code {
      */
     private function _load ($handle) {
         $binaryReader = new Utility\BinaryReader($handle);
-        $this->_marshalType = $binaryReader->readByte();
-        switch ($this->_marshalType) {
+        $marshalType = $binaryReader->readByte();
+        switch ($marshalType) {
             case 'c':
                 $this->_argcount = $binaryReader->readLong();
                 $this->_nlocals = $binaryReader->readLong();
