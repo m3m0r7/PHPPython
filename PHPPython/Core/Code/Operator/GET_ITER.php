@@ -7,6 +7,6 @@ class GET_ITER extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $this->_stacks[] = new \ArrayIterator(array_pop($this->_stacks));
     }
 }

@@ -7,6 +7,7 @@ class JUMP_ABSOLUTE extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $offset = $this->_binaryReader->readShort();
+        $this->_binaryReader->offset($offset);
     }
 }

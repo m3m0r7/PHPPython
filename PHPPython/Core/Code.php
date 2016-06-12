@@ -41,11 +41,33 @@ class Code {
         throw new Exception\CodeException('Error loading code');
     }
 
+    /**
+     * get private variant
+     * @param  string $key
+     * @return mixed
+     */
     public function __get ($key) {
         // load magic vars
         if (isset($this->{'_' . $key})) {
-            return $this->{'_' . $key};
+            if (!is_array($this->{'_' . $key})) {
+                return $this->{'_' . $key};
+            }
+            $class = new class extends \ArrayObject {
+                public function store ($address, $value) {
+                    parent::offsetSet($address, $value);
+                }
+            };
+            return new $class($this->{'_' . $key});
         }
+    }
+
+    /**
+     * check variant is set
+     * @param  string  $key
+     * @return boolean
+     */
+    public function __isset ($key) {
+        return isset($this->{'_' . $key});
     }
 
     /**
@@ -75,11 +97,9 @@ class Code {
                 // read nested code
                 return;
             case '.':
-                // coming soon...
-                return;
+                return '.';
             case '0':
-                // coming soon...
-                return;
+                return null;
             case 'N':
                 return null;
             case 'T':
@@ -90,26 +110,21 @@ class Code {
                 // coming soon...
                 return;
             case 'f':
-                // coming soon...
-                return;
+                return $binaryReader->readDouble();
             case 'g':
-                // coming soon...
-                return;
+                return $binaryReader->readDouble();
             case 'i':
-                // coming soon...
-                return;
+                return $binaryReader->readLong();
             case 'I':
-                // coming soon...
-                return;
+                return $binaryReader->readLong64();
             case 'x':
-                // coming soon...
+                // what ?
                 return;
             case 'y':
-                // coming soon...
+                // what ?
                 return;
             case 'l':
-                // coming soon...
-                return;
+                return $binaryReader->readLong();
             case 'R':
                 // coming soon...
                 return;
@@ -120,15 +135,17 @@ class Code {
                 $size = $binaryReader->readLong();
                 return $binaryReader->readByte($size);
             case 'u':
-                // coming soon...
+                // what ?
                 return;
+            case 'c':
+                return $binaryReader->readByte();
             case '(':
                 $tupleSize = $binaryReader->readLong();
                 $tuple = [];
                 while ($tupleSize > 0) {
                     $tuple[] = $this->_load($handle);
                     $tupleSize--;
-                };
+                }
                 return $tuple;
             case '[':
                 // coming soon...

@@ -54,6 +54,30 @@ class BinaryReader {
     }
 
     /**
+     * [offset description]
+     * @param [type] $newOffset [description]
+     */
+    public function offset ($newOffset) {
+        fseek($this->_handle, $newOffset, SEEK_SET);
+    }
+
+    /**
+     * [offset description]
+     * @param [type] $newOffset [description]
+     */
+    public function seek ($newOffset) {
+        fseek($this->_handle, $newOffset, SEEK_CUR);
+    }
+
+    /**
+     * get bytestream current position
+     * @return int
+     */
+    public function position () {
+        return ftell($this->_handle);
+    }
+
+    /**
      * unpacking binary to string, short or int
      * @return mixed
      */

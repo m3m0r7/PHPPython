@@ -7,6 +7,19 @@ class FOR_ITER extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $byteCodeCounter = $this->_binaryReader->readShort();
+        $iter = array_pop($this->_stacks);
+
+        if (!$iter->valid()){
+            $this->_binaryReader->seek($byteCodeCounter);
+            return;
+        }
+        
+        // add iterator to stack
+        $this->_stacks[] = $iter;
+
+        // add current value to stack
+        $this->_stacks[] = $iter->current();
+        $iter->next();
     }
 }
