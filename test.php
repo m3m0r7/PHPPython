@@ -26,6 +26,7 @@ require 'PHPPython/Core/Code/Invoker.php';
 // exit();
 
 
+system('python -m compileall test.py');
 $a = new PHPPython\PHPPython('test.pyc');
-var_dump($a->getVersion());
-var_dump((new PHPPython\Code\Invoker(new PHPPython\Code($a)))->invoke());
+var_dump('Python version : ' . $a->getVersion());
+(new PHPPython\Code\Invoker(new PHPPython\Code($a)))->invoke();
