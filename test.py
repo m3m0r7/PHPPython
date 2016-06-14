@@ -4,4 +4,6 @@ print ("Hello World!");
 for i in tuple:
     print i
     if i == 9:
-      print ("1 > 1");
+        print ("is 9");
+    elif i == 100:
+        print ("is 100");
