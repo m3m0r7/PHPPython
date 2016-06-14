@@ -7,6 +7,12 @@ class POP_JUMP_IF_FALSE extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+
+        $offset = $this->_binaryReader->readShort();
+        $value = array_pop($this->_stacks);
+        if ($value === false) {
+            $this->_binaryReader->offset($offset);
+        }
+
     }
 }
