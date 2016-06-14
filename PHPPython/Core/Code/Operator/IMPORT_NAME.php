@@ -7,6 +7,9 @@ class IMPORT_NAME extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $address = $this->_binaryReader->readShort();
+        var_dump($address, $this->_invoker->getCodeObject()->names[$address]);
+        exit();
+        // var_dump($this->_invoker->getCodeObject()->names);exit();
     }
 }

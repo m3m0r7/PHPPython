@@ -14,6 +14,7 @@ class Code {
     private $_code          = null;
     private $_consts        = null;
     private $_names         = null;
+    private $_namehashes     = null;
     private $_varnames      = null;
     private $_freevars      = null;
     private $_cellvars      = null;
@@ -59,10 +60,18 @@ class Code {
         }
     }
 
+    /**
+     * [__call description]
+     * @param  [type] $name      [description]
+     * @param  [type] $arguments [description]
+     * @return [type]            [description]
+     */
     public function __call ($name, $arguments) {
         if (preg_match('/\Astore([A-Z][a-z0-9_]*)\Z/', $name, $methodName)) {
             $methodName = '_' . strtolower($methodName[1]);
-            $this->{$methodName}[$arguments[0]] = $arguments[1];
+            if ($methodName === '_namehashes') {
+                $this->{$methodName}[$this->_names[$arguments[0]]] = $arguments[1];
+            }
         }
     }
 

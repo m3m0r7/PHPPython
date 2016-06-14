@@ -10,6 +10,6 @@ class STORE_NAME extends \PHPPython\Code\Operator {
 
         $address = $this->_binaryReader->readShort();
         $value = array_pop($this->_stacks);
-        $this->_invoker->getCodeObject()->storeNames($address, $value);
+        $this->_invoker->getCodeObject()->storeNamehashes($address, $value);
     }
 }

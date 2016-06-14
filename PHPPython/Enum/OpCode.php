@@ -87,11 +87,12 @@ class OpCode extends \PHPPython\Enum {
     const LOAD_NAME						 = 0x0065;
     const BUILD_TUPLE					 = 0x0066;
     const BUILD_LIST					 = 0x0067;
-    const BUILD_MAP						 = 0x0068;
-    const LOAD_ATTR						 = 0x0069;
-    const COMPARE_OP					 = 0x006A;
-    const IMPORT_NAME					 = 0x006B;
-    const IMPORT_FROM					 = 0x006C;
+    const BUILD_SET			             = 0x0068;
+    const BUILD_MAP						 = 0x0069;
+    const LOAD_ATTR						 = 0x006A;
+    const COMPARE_OP					 = 0x006B;
+    const IMPORT_NAME					 = 0x006C;
+    const IMPORT_FROM					 = 0x006D;
     const JUMP_FORWARD					 = 0x006E;
     const JUMP_IF_FALSE					 = 0x006F;
     const JUMP_IF_TRUE					 = 0x0070;
