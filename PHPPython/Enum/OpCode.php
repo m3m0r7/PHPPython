@@ -40,6 +40,7 @@ class OpCode extends \PHPPython\Enum {
     const DELETE_SLICE_1				 = 0x0033;
     const DELETE_SLICE_2				 = 0x0034;
     const DELETE_SLICE_3				 = 0x0035;
+    const STORE_MAP					     = 0x0036;
     const INPLACE_ADD					 = 0x0037;
     const INPLACE_SUBTRACT				 = 0x0038;
     const INPLACE_MULTIPLY				 = 0x0039;

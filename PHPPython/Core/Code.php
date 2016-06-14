@@ -133,16 +133,13 @@ class Code {
             case 'I':
                 return $binaryReader->readLong64();
             case 'x':
-                // what ?
-                return;
+                throw new Exception\CodeException('Not implement marshal type "' . $marshalType . '"');
             case 'y':
-                // what ?
-                return;
+                throw new Exception\CodeException('Not implement marshal type "' . $marshalType . '"');
             case 'l':
                 return $binaryReader->readLong();
             case 'R':
-                // coming soon...
-                return;
+                throw new Exception\CodeException('Not implement marshal type "' . $marshalType . '"');
             case 's':
                 $size = $binaryReader->readLong();
                 return $binaryReader->readByte($size);
@@ -150,8 +147,7 @@ class Code {
                 $size = $binaryReader->readLong();
                 return $binaryReader->readByte($size);
             case 'u':
-                // what ?
-                return;
+                throw new Exception\CodeException('Not implement marshal type "' . $marshalType . '"');
             case 'c':
                 return $binaryReader->readByte();
             case '(':
@@ -163,15 +159,12 @@ class Code {
                 }
                 return $tuple;
             case '[':
-                // coming soon...
-                return;
+                throw new Exception\CodeException('Not implement marshal type "' . $marshalType . '"');
             case '{':
-                // coming soon...
-                return;
+                throw new Exception\CodeException('Not implement marshal type "' . $marshalType . '"');
             case '<':
             case '>':
-                // coming soon...
-                return;
+                throw new Exception\CodeException('Not implement marshal type "' . $marshalType . '"');
         }
     }
 

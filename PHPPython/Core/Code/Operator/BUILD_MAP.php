@@ -1,5 +1,6 @@
 <?php
 namespace PHPPython\Code\Operator;
+require_once __DIR__ . '/../../../Object/Dictionary.php';
 
 class BUILD_MAP extends \PHPPython\Code\Operator {
     /**
@@ -7,6 +8,9 @@ class BUILD_MAP extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $dictionaryLength = $this->_binaryReader->readShort();
+
+        // add empty dictionary object
+        $this->_stacks[] = new \PHPPython\Object\Dictionary();
     }
 }

@@ -1,5 +1,6 @@
 <?php
 namespace PHPPython\Code\Operator;
+require_once __DIR__ . '/../../../Object/Attr.php';
 
 class LOAD_ATTR extends \PHPPython\Code\Operator {
     /**
@@ -7,6 +8,9 @@ class LOAD_ATTR extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $address = $this->_binaryReader->readShort();
+        $name = $this->_invoker->getCodeObject()->names[$address];
+        $value = array_pop($this->_stacks);
+        $this->_stacks[] = $value->getAttr($name);
     }
 }

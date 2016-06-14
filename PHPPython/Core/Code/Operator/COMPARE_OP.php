@@ -33,11 +33,17 @@ class COMPARE_OP extends \PHPPython\Code\Operator {
                 $this->_stacks[] = $conditionLeft >= $conditionRight;
                 break;
             case 'in':
-                $this->_stacks[] = in_array($conditionLeft, $conditionRight);
-                break;
+                if ($conditionRight instanceof \PHPPython\Object\Dictionary) {
+                    $this->_stacks[] = in_array($conditionLeft, array_keys($conditionRight->getArrayCopy()));
+                    return;
+                }
+                throw new \PHPPython\Exception\OpCodeException('Unknown operand object type');
             case 'not in':
-                $this->_stacks[] = !in_array($conditionLeft, $conditionRight);
-                break;
+                if ($conditionRight instanceof \PHPPython\Object\Dictionary) {
+                    $this->_stacks[] = !in_array($conditionLeft, array_keys($conditionRight->getArrayCopy()));
+                    return;
+                }
+                throw new \PHPPython\Exception\OpCodeException('Unknown operand object type');
             case 'is':
                 $this->_stacks[] = $conditionLeft === $conditionRight;
                 break;

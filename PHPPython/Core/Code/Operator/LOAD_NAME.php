@@ -8,6 +8,13 @@ class LOAD_NAME extends \PHPPython\Code\Operator {
      */
     public function exec () {
         $address = $this->_binaryReader->readShort();
-        $this->_stacks[] = $this->_invoker->getCodeObject()->namehashes[$this->_invoker->getCodeObject()->names[$address]];
+        $name = $this->_invoker->getCodeObject()->names[$address];
+
+        // has built-in function
+        if (\PHPPython\Code\BuiltInFunction::hasFunction($name)) {
+            $this->_stacks[] = '\PHPPython\Code\BuiltInFunction::' . $name;
+            return;
+        }
+        $this->_stacks[] = $this->_invoker->getCodeObject()->namehashes[$name];
     }
 }

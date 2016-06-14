@@ -7,6 +7,16 @@ class CALL_FUNCTION extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $argumentCount = $this->_binaryReader->readShort();
+        $arguments = [];
+        for ($i = 0; $i < $argumentCount; $i++) {
+            $arguments[] = array_pop($this->_stacks);
+        }
+
+        $function = array_pop($this->_stacks);
+        if (is_callable($function)) {
+            $this->stacks[] = call_user_func_array($function, $arguments);
+        }
+
     }
 }

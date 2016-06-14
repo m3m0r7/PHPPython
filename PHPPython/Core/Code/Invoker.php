@@ -3,7 +3,9 @@
 namespace PHPPython\Code;
 require_once __DIR__ . '/../../Enum/OpCode.php';
 require_once __DIR__ . '/../../Enum/OpCompare.php';
+require_once __DIR__ . '/../../Exception/OpCodeException.php';
 require_once __DIR__ . '/Operator.php';
+require_once __DIR__ . '/BuiltInFunction.php';
 
 class Invoker {
 
@@ -37,12 +39,14 @@ class Invoker {
             $readOpCode = ord($binaryReader->readByte());
             $mnemonic = $opcode->getName($readOpCode);
             if ($mnemonic === null) {
-                return new CodeException('Not implement mnemonic_name(' . sprintf('0x04X', $readOpCode) . ').');
+                $this->_invokedOpCodes[] = [
+                    'codes' => $codes,
+                    'timestamp' => microtime(true) - $startTimestamp
+                ];
+                $this->debug();
+                throw new \PHPPython\Exception\OpCodeException('Not implement mnemonic_name(' . sprintf('0x%04X', $readOpCode) . ').');
             }
             $mnemonicFile = '\\PHPPython\\Code\\Operator\\' . $mnemonic;
-
-            // exec operator
-            $returnValue = (new $mnemonicFile($this, $stacks, $blockStacks, $binaryReader))->exec();
 
             $codes[] = [
                 $binaryReader->position(),
@@ -53,11 +57,21 @@ class Invoker {
                 $mnemonicFile
             ];
 
-            if ($readOpCode === \PHPPython\Enum\OpCode::RETURN_VALUE) {
-                $this->_invokedOpCodes[] = array(
+            if ($readOpCode === \PHPPython\Enum\OpCode::STOP_CODE) {
+                $this->_invokedOpCodes[] = [
                     'codes' => $codes,
                     'timestamp' => microtime(true) - $startTimestamp
-                );
+                ];
+            }
+
+            // exec operator
+            $returnValue = (new $mnemonicFile($this, $stacks, $blockStacks, $binaryReader))->exec();
+
+            if ($readOpCode === \PHPPython\Enum\OpCode::RETURN_VALUE) {
+                $this->_invokedOpCodes[] = [
+                    'codes' => $codes,
+                    'timestamp' => microtime(true) - $startTimestamp
+                ];
                 return $returnValue;
             }
 
