@@ -2,6 +2,7 @@
 
 namespace PHPPython\Code;
 require_once __DIR__ . '/../../Enum/OpCode.php';
+require_once __DIR__ . '/../../Enum/OpCompare.php';
 require_once __DIR__ . '/Operator.php';
 
 class Invoker {
@@ -35,6 +36,9 @@ class Invoker {
 
             $readOpCode = ord($binaryReader->readByte());
             $mnemonic = $opcode->getName($readOpCode);
+            if ($mnemonic === null) {
+                return new CodeException('Not implement mnemonic_name(' . sprintf('0x04X', $readOpCode) . ').');
+            }
             $mnemonicFile = '\\PHPPython\\Code\\Operator\\' . $mnemonic;
 
             // exec operator

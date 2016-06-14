@@ -94,9 +94,11 @@ class OpCode extends \PHPPython\Enum {
     const IMPORT_NAME					 = 0x006C;
     const IMPORT_FROM					 = 0x006D;
     const JUMP_FORWARD					 = 0x006E;
-    const JUMP_IF_FALSE					 = 0x006F;
-    const JUMP_IF_TRUE					 = 0x0070;
+    const JUMP_IF_FALSE_OR_POP			 = 0x006F;
+    const JUMP_IF_TRUE_OR_POP			 = 0x0070;
     const JUMP_ABSOLUTE					 = 0x0071;
+    const POP_JUMP_IF_FALSE			     = 0x0072;
+    const POP_JUMP_IF_TRUE				 = 0x0073;
     const LOAD_GLOBAL					 = 0x0074;
     const CONTINUE_LOOP					 = 0x0077;
     const SETUP_LOOP					 = 0x0078;
