@@ -16,6 +16,9 @@ print "test1" in dictTest;
 print dictTest.has_key("test1");
 print dictTest.has_key("test2");
 print dictTest.has_key("test9999");
+print dictTest.__php_info__;
+print dictTest.__php_hash__;
+print dictTest.__hash__;
 
 for key, value in dictTest.iteritems():
     print key, value
