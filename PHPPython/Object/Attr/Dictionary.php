@@ -9,8 +9,7 @@ require_once __DIR__ . '/../../Object/Attr.php';
 class Dictionary extends \PHPPython\Object\Attr {
 
     public function iteritems () {
-        var_dump($this);
-        exit();
+        return $this->getParent();
     }
 
     public function has_key ($keyName) {

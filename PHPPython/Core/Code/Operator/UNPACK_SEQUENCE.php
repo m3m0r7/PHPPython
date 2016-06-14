@@ -7,6 +7,13 @@ class UNPACK_SEQUENCE extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $sequences = $this->_binaryReader->readShort();
+        $value = array_pop($this->_stacks);
+        $sequenceData = str_split($value, ceil(strlen($value) / $sequences));
+
+        while (($value = array_pop($sequenceData)) !== null) {
+            $this->_stacks[] = $value;
+        }
+        
     }
 }
