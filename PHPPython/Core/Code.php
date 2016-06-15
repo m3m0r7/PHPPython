@@ -62,6 +62,9 @@ class Code {
             if ($methodName === 'namehashes') {
                 $this->_objects->{$methodName}[$this->_objects->names[$arguments[0]]] = $arguments[1];
             }
+            if ($methodName === 'varnamehashes') {
+                $this->_objects->{$methodName}[$this->_objects->varnames[$arguments[0]]] = $arguments[1];
+            }
         }
     }
 

@@ -11,12 +11,10 @@ require_once __DIR__ . '/BuiltInFunction.php';
 class Invoker {
 
     protected $_code = null;
-    protected $_arguments = [];
     protected $_invokedOpCodes = [];
 
-    public function __construct (\PHPPython\Code $code, array $arguments = []) {
+    public function __construct (\PHPPython\Code $code) {
         $this->_code = $code;
-        $this->_arguments = $arguments;
 
         // load opcodes
         foreach (glob(__DIR__ . '/Operator/*.php') as $operateFile) {
@@ -25,7 +23,7 @@ class Invoker {
     }
 
     public function __invoke () {
-        return $this->invoke();
+        return call_user_func_array([$this, 'invoke'], func_get_args());
     }
 
     public function invoke () {
@@ -33,6 +31,11 @@ class Invoker {
         fwrite($codeHandle, $this->_code->code);
         rewind($codeHandle);
         $binaryReader = new \PHPPython\Utility\BinaryReader($codeHandle);
+
+        // set to varnamehashes
+        foreach (func_get_args() as $key => $value) {
+            $this->_code->storeVarnamehashes($key, $value);
+        }
 
         $opcode = new \PHPPython\Enum\OpCode();
         $blockStacks = [];
@@ -52,6 +55,7 @@ class Invoker {
                 $this->debug();
                 throw new \PHPPython\Exception\OpCodeException('Not implement mnemonic_name(' . sprintf('0x%04X', $readOpCode) . ').');
             }
+            var_dump($mnemonic);
             $mnemonicFile = '\\PHPPython\\Code\\Operator\\' . $mnemonic;
 
             $codes[] = [

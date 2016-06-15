@@ -5,7 +5,7 @@ namespace PHPPython\Code;
 class BuiltInFunction {
 
     public static function len ($object) {
-        if ($object instanceof \PHPPython\Object\Dictionary) {
+        if ($object instanceof \PHPPython\Object\PythonDictionary) {
             return $object->count();
         }
         if (is_string($object)) {

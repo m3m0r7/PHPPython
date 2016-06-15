@@ -1,6 +1,6 @@
 <?php
 namespace PHPPython\Code\Operator;
-require_once __DIR__ . '/../../../Object/Dictionary.php';
+require_once __DIR__ . '/../../../Object/PythonDictionary.php';
 
 class BUILD_MAP extends \PHPPython\Code\Operator {
     /**
@@ -11,6 +11,6 @@ class BUILD_MAP extends \PHPPython\Code\Operator {
         $dictionaryLength = $this->_binaryReader->readShort();
 
         // add empty dictionary object
-        \StackPool::add(new \PHPPython\Object\Dictionary());
+        \StackPool::add(new \PHPPython\Object\PythonDictionary());
     }
 }

@@ -1,5 +1,7 @@
 <?php
 namespace PHPPython\Code\Operator;
+require_once __DIR__ . '/../../../Object/PythonTuple.php';
+
 
 class BUILD_TUPLE extends \PHPPython\Code\Operator {
     /**
@@ -8,7 +10,9 @@ class BUILD_TUPLE extends \PHPPython\Code\Operator {
      */
     public function exec () {
         $count = $this->_binaryReader->readShort();
-        $tuple = new \ArrayObject();
+
+        $tuple = new \PHPPython\Object\PythonTuple();
+
         for ($i = 0; $i < $count; $i++) {
             $tuple->append(\StackPool::pop());
         }

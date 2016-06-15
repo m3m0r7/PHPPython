@@ -15,7 +15,7 @@ class CALL_FUNCTION extends \PHPPython\Code\Operator {
 
         $function = \StackPool::pop();
         if (is_callable($function)) {
-            \StackPool::add(call_user_func_array($function, $arguments));
+            \StackPool::add(call_user_func_array($function, array_reverse($arguments)));
             return;
         }
 

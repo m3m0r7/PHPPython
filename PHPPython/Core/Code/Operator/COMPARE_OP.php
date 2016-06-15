@@ -33,13 +33,13 @@ class COMPARE_OP extends \PHPPython\Code\Operator {
                 \StackPool::add($conditionLeft >= $conditionRight);
                 break;
             case 'in':
-                if ($conditionRight instanceof \PHPPython\Object\Dictionary) {
+                if ($conditionRight instanceof \PHPPython\Object\PythonDictionary) {
                     \StackPool::add(in_array($conditionLeft, array_keys($conditionRight->getArrayCopy())));
                     return;
                 }
                 throw new \PHPPython\Exception\OpCodeException('Unknown operand object type');
             case 'not in':
-                if ($conditionRight instanceof \PHPPython\Object\Dictionary) {
+                if ($conditionRight instanceof \PHPPython\Object\PythonDictionary) {
                     \StackPool::add(in_array($conditionLeft, array_keys($conditionRight->getArrayCopy())));
                     return;
                 }

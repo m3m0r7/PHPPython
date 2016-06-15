@@ -23,7 +23,7 @@
 # for key, value in dictTest.iteritems():
 #     print key, value
 
-def callMeTest(l):
+def callMeTest(l, b):
     l.append(100)
     l.append(200)
     l.extend([
@@ -49,4 +49,4 @@ def callMeTest(l):
         print i*99
 
 # callMeTest function
-callMeTest([100, 200, 300, 400]);
+callMeTest([100, 200, 300, 400], [2, 3]);
