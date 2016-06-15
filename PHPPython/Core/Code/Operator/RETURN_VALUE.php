@@ -7,7 +7,7 @@ class RETURN_VALUE extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        $value = array_pop($this->_stacks);
+        $value = \StackPool::pop();
         return $value;
     }
 }

@@ -7,6 +7,12 @@ class BUILD_LIST extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $count = $this->_binaryReader->readShort();
+        $list = new \ArrayObject();
+        for ($i = 0; $i < $count; $i++) {
+            $list->append(\StackPool::pop());
+        }
+
+        \StackPool::add($list);
     }
 }

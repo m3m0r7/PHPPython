@@ -7,6 +7,11 @@ class BUILD_TUPLE extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $count = $this->_binaryReader->readShort();
+        $tuple = new \ArrayObject();
+        for ($i = 0; $i < $count; $i++) {
+            $tuple->append(\StackPool::pop());
+        }
+        \StackPool::add($tuple);
     }
 }

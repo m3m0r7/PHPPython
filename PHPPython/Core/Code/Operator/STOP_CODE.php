@@ -7,6 +7,7 @@ class STOP_CODE extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
+        $this->_invoker->debug();
         throw new \PHPPython\Exception\CodeException('System Error!');
     }
 }

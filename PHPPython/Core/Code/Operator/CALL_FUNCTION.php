@@ -10,12 +10,12 @@ class CALL_FUNCTION extends \PHPPython\Code\Operator {
         $argumentCount = $this->_binaryReader->readShort();
         $arguments = [];
         for ($i = 0; $i < $argumentCount; $i++) {
-            $arguments[] = array_pop($this->_stacks);
+            $arguments[] = \StackPool::pop();
         }
 
-        $function = array_pop($this->_stacks);
+        $function = \StackPool::pop();
         if (is_callable($function)) {
-            $this->_stacks[] = call_user_func_array($function, $arguments);
+            \StackPool::add(call_user_func_array($function, $arguments));
             return;
         }
 

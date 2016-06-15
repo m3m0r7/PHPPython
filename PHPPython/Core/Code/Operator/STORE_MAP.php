@@ -8,12 +8,12 @@ class STORE_MAP extends \PHPPython\Code\Operator {
      */
     public function exec () {
 
-        $key = array_pop($this->_stacks);
-        $value = array_pop($this->_stacks);
+        $key = \StackPool::pop();
+        $value = \StackPool::pop();
 
         // load TOS
         // add refstack to dictionary key and value pairs.
-        current($this->_stacks)->offsetSet($key, $value);
+        \StackPool::set($key, $value);
 
     }
 }

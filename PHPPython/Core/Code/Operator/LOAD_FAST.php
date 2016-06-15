@@ -7,6 +7,8 @@ class LOAD_FAST extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $address = $this->_binaryReader->readShort();
+        $name = $this->_invoker->getCodeObject()->varnames[$address];
+        \StackPool::add($this->_invoker->getCodeObject()->varnamehashes[$name]);
     }
 }

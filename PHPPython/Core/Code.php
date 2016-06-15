@@ -2,26 +2,13 @@
 
 namespace PHPPython;
 
+require_once __DIR__ . '/CodeObject.php';
 require_once __DIR__ . '/../Exception/CodeException.php';
 require_once __DIR__ . '/../Utility/BinaryReader.php';
 
 class Code {
 
-    private $_argcount      = null;
-    private $_nlocals       = null;
-    private $_stackSize     = null;
-    private $_flags         = null;
-    private $_code          = null;
-    private $_consts        = null;
-    private $_names         = null;
-    private $_namehashes     = null;
-    private $_varnames      = null;
-    private $_freevars      = null;
-    private $_cellvars      = null;
-    private $_filename      = null;
-    private $_name          = null;
-    private $_firstlineno   = null;
-    private $_lnotab        = null;
+    private $_objects = null;
 
     /**
      * init python bytecode
@@ -30,19 +17,22 @@ class Code {
     public function __construct ($codeHandle = null) {
         if ($codeHandle instanceof \PHPPython\PHPPython) {
             $_codeHandle = (clone $codeHandle)->getHandle();
-            $this->_load($_codeHandle);
+            $this->_objects = $this->_load($_codeHandle);
             return;
         } else if ($codeHandle instanceof \PHPPython\Code) {
             $_codeHandle = fopen('php://memory', 'wb');
             fwrite($_codeHandle, $codeHandle->code);
             rewind($_codeHandle);
-            $this->_load($this->_codeHandle);
+            $this->_objects = $this->_load($this->_codeHandle);
+            return;
+        } else if ($codeHandle instanceof \PHPPython\CodeObject) {
+            $this->_objects = clone $codeHandle;
             return;
         } else if (is_string($codeHandle)) {
             $_codeHandle = fopen('php://memory', 'wb');
             fwrite($_codeHandle, $codeHandle);
             rewind($_codeHandle);
-            $this->_load($this->_codeHandle);
+            $this->_objects = $this->_load($this->_codeHandle);
             return;
         }
         throw new Exception\CodeException('Error loading code');
@@ -55,8 +45,8 @@ class Code {
      */
     public function __get ($key) {
         // load magic vars
-        if ($key[0] !== '_' && isset($this->{'_' . $key})) {
-            return $this->{'_' . $key};
+        if ($key[0] !== '_' && isset($this->_objects->$key)) {
+            return $this->_objects->$key;
         }
     }
 
@@ -68,9 +58,9 @@ class Code {
      */
     public function __call ($name, $arguments) {
         if (preg_match('/\Astore([A-Z][a-z0-9_]*)\Z/', $name, $methodName)) {
-            $methodName = '_' . strtolower($methodName[1]);
-            if ($methodName === '_namehashes') {
-                $this->{$methodName}[$this->_names[$arguments[0]]] = $arguments[1];
+            $methodName = strtolower($methodName[1]);
+            if ($methodName === 'namehashes') {
+                $this->_objects->{$methodName}[$this->_objects->names[$arguments[0]]] = $arguments[1];
             }
         }
     }
@@ -81,8 +71,7 @@ class Code {
      * @return boolean
      */
     public function __isset ($key) {
-        $key = '_' . $key;
-        return property_exists($this, $key) && $this->$key !== null;
+        return property_exists($this->_objects, $key) && $this->_objects->$key !== null;
     }
 
     /**
@@ -94,23 +83,31 @@ class Code {
         $marshalType = $binaryReader->readByte();
         switch ($marshalType) {
             case 'c':
-                $this->_argcount = $binaryReader->readLong();
-                $this->_nlocals = $binaryReader->readLong();
-                $this->_stackSize = $binaryReader->readLong();
-                $this->_flags = $binaryReader->readLong();
-                $this->_code = $this->_load($handle);
-                $this->_consts = $this->_load($handle);
-                $this->_names = $this->_load($handle);
-                $this->_varnames = $this->_load($handle);
-                $this->_freevars = $this->_load($handle);
-                $this->_cellvars = $this->_load($handle);
-                $this->_filename = $this->_load($handle);
-                $this->_name = $this->_load($handle);
-                $this->_firstlineno = $binaryReader->readLong();
-                $this->_lnotab = $this->_load($handle);
 
-                // read nested code
-                return;
+                $objects = new CodeObject();
+
+                $objects->argcount = $binaryReader->readLong();
+                $objects->nlocals = $binaryReader->readLong();
+                $objects->stackSize = $binaryReader->readLong();
+                $objects->flags = $binaryReader->readLong();
+                $objects->code = $this->_load($handle);
+                $objects->consts = $this->_load($handle);
+                $objects->names = $this->_load($handle);
+                foreach ($objects->names as $name) {
+                    $objects->namehashes[$name] = null;
+                }
+                $objects->varnames = $this->_load($handle);
+                foreach ($objects->varnames as $name) {
+                    $objects->varnamehashes[$name] = null;
+                }
+                $objects->freevars = $this->_load($handle);
+                $objects->cellvars = $this->_load($handle);
+                $objects->filename = $this->_load($handle);
+                $objects->name = $this->_load($handle);
+                $objects->firstlineno = $binaryReader->readLong();
+                $objects->lnotab = $this->_load($handle);
+
+                return $objects;
             case '.':
                 return '.';
             case '0':
@@ -122,8 +119,7 @@ class Code {
             case 'F':
                 return false;
             case 'S':
-                // coming soon...
-                return;
+                throw new Exception\CodeException('Not implement marshal type "' . $marshalType . '"');
             case 'f':
                 return $binaryReader->readDouble();
             case 'g':
@@ -139,7 +135,10 @@ class Code {
             case 'l':
                 return $binaryReader->readLong();
             case 'R':
-                throw new Exception\CodeException('Not implement marshal type "' . $marshalType . '"');
+                $ref = $binaryReader->readLong();
+
+                // do nothing...
+                return $ref;
             case 's':
                 $size = $binaryReader->readLong();
                 return $binaryReader->readByte($size);

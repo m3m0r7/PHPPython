@@ -7,6 +7,6 @@ class POP_TOP extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        \StackPool::pop();
     }
 }

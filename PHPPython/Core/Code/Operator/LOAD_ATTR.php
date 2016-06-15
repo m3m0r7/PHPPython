@@ -10,7 +10,7 @@ class LOAD_ATTR extends \PHPPython\Code\Operator {
     public function exec () {
         $address = $this->_binaryReader->readShort();
         $name = $this->_invoker->getCodeObject()->names[$address];
-        $value = array_pop($this->_stacks);
-        $this->_stacks[] = $value->getAttr($name);
+        $value = \StackPool::pop();
+        \StackPool::add($value->getAttr($name));
     }
 }

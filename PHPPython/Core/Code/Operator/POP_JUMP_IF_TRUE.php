@@ -9,7 +9,7 @@ class POP_JUMP_IF_TRUE extends \PHPPython\Code\Operator {
     public function exec () {
 
         $offset = $this->_binaryReader->readShort();
-        $value = array_pop($this->_stacks);
+        $value = \StackPool::pop();
         if ($value === true) {
             $this->_binaryReader->offset($offset);
         }

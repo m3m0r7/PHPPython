@@ -11,6 +11,6 @@ class BUILD_MAP extends \PHPPython\Code\Operator {
         $dictionaryLength = $this->_binaryReader->readShort();
 
         // add empty dictionary object
-        $this->_stacks[] = new \PHPPython\Object\Dictionary();
+        \StackPool::add(new \PHPPython\Object\Dictionary());
     }
 }

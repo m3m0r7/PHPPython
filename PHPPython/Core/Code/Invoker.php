@@ -5,20 +5,27 @@ require_once __DIR__ . '/../../Enum/OpCode.php';
 require_once __DIR__ . '/../../Enum/OpCompare.php';
 require_once __DIR__ . '/../../Exception/OpCodeException.php';
 require_once __DIR__ . '/Operator.php';
+require_once __DIR__ . '/StackPool.php';
 require_once __DIR__ . '/BuiltInFunction.php';
 
 class Invoker {
 
     protected $_code = null;
+    protected $_arguments = [];
     protected $_invokedOpCodes = [];
 
-    public function __construct (\PHPPython\Code $code) {
+    public function __construct (\PHPPython\Code $code, array $arguments = []) {
         $this->_code = $code;
+        $this->_arguments = $arguments;
 
         // load opcodes
         foreach (glob(__DIR__ . '/Operator/*.php') as $operateFile) {
             require_once $operateFile;
         }
+    }
+
+    public function __invoke () {
+        return $this->invoke();
     }
 
     public function invoke () {
@@ -28,7 +35,6 @@ class Invoker {
         $binaryReader = new \PHPPython\Utility\BinaryReader($codeHandle);
 
         $opcode = new \PHPPython\Enum\OpCode();
-        $stacks = [];
         $blockStacks = [];
 
         $codes = [];
@@ -52,23 +58,25 @@ class Invoker {
                 $binaryReader->position(),
                 $readOpCode,
                 $mnemonic,
-                sizeof($stacks),
+                \StackPool::size(),
                 sizeof($blockStacks),
                 $mnemonicFile
             ];
 
             if ($readOpCode === \PHPPython\Enum\OpCode::STOP_CODE) {
                 $this->_invokedOpCodes[] = [
+                    'name' => $this->_code->name,
                     'codes' => $codes,
                     'timestamp' => microtime(true) - $startTimestamp
                 ];
             }
 
             // exec operator
-            $returnValue = (new $mnemonicFile($this, $stacks, $blockStacks, $binaryReader))->exec();
+            $returnValue = (new $mnemonicFile($this, $blockStacks, $binaryReader))->exec();
 
             if ($readOpCode === \PHPPython\Enum\OpCode::RETURN_VALUE) {
                 $this->_invokedOpCodes[] = [
+                    'name' => $this->_code->name,
                     'codes' => $codes,
                     'timestamp' => microtime(true) - $startTimestamp
                 ];
@@ -80,6 +88,7 @@ class Invoker {
 
     public function debug () {
         foreach ($this->_invokedOpCodes as $codes) {
+            printf("Name: %s\n", $codes['name']);
             printf("Load time: %.fs\n", round($codes['timestamp'], 2));
             printf("PC\tOpCode\tMnemonic\tstack(s)\tblock stack(s)\n");
             foreach ($codes['codes'] as $code) {

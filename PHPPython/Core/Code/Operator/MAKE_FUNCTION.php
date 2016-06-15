@@ -7,6 +7,12 @@ class MAKE_FUNCTION extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $argumentCount = $this->_binaryReader->readShort();
+
+        $function = \StackPool::current();
+
+        // wrap invoker
+        \StackPool::add(new \PHPPython\Code\Invoker(new \PHPPython\Code($function)));
+
     }
 }

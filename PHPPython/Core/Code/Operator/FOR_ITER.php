@@ -8,18 +8,18 @@ class FOR_ITER extends \PHPPython\Code\Operator {
      */
     public function exec () {
         $byteCodeCounter = $this->_binaryReader->readShort();
-        $iter = array_pop($this->_stacks);
+        $iter = \StackPool::pop();
 
         if (!$iter->valid()){
             $this->_binaryReader->seek($byteCodeCounter);
             return;
         }
-        
+
         // add iterator to stack
-        $this->_stacks[] = $iter;
+        \StackPool::add($iter);
 
         // add current value to stack
-        $this->_stacks[] = $iter->current();
+        \StackPool::add($iter->current());
         $iter->next();
     }
 }

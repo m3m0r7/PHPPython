@@ -8,6 +8,6 @@ class LOAD_CONST extends \PHPPython\Code\Operator {
      */
     public function exec () {
         $address = $this->_binaryReader->readShort();
-        $this->_stacks[] = $this->_invoker->getCodeObject()->consts[$address];
+        \StackPool::add($this->_invoker->getCodeObject()->consts[$address]);
     }
 }

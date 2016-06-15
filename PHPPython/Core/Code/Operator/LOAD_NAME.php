@@ -12,9 +12,9 @@ class LOAD_NAME extends \PHPPython\Code\Operator {
 
         // has built-in function
         if (\PHPPython\Code\BuiltInFunction::hasFunction($name)) {
-            $this->_stacks[] = '\PHPPython\Code\BuiltInFunction::' . $name;
+            \StackPool::add('\PHPPython\Code\BuiltInFunction::' . $name);
             return;
         }
-        $this->_stacks[] = $this->_invoker->getCodeObject()->namehashes[$name];
+        \StackPool::add($this->_invoker->getCodeObject()->namehashes[$name]);
     }
 }
