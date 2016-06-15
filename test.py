@@ -13,6 +13,7 @@ dictTest = {"test1" : 123, "test2" : 321, "test3" : 456};
 print dictTest;
 print len(dictTest);
 print "test1" in dictTest;
+print dictTest["test1"];
 print dictTest.has_key("test1");
 print dictTest.has_key("test2");
 print dictTest.has_key("test9999");
@@ -34,7 +35,11 @@ def callMeTest(l, b):
     ])
     l.pop()
     l.append(9090)
+    print l;
     l.reverse()
+    l.append(333);
+    print l;
+    print b;
 
     print 1+2
     print 2**3
