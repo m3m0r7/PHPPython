@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import glob
+print glob.glob('PHPPython/Core/Code/Operator/*')
 tuple = (1, 2, 3, 4, 9, 6, 1, 100);
 print ("Hello World!");
 for i in tuple:

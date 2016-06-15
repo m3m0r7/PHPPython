@@ -1,12 +1,13 @@
 <?php
 
 namespace PHPPython\Object;
+require_once __DIR__  . '/PythonObject.php';
 require_once __DIR__ . '/Attr/' . basename(__FILE__);
 
 /**
  * This class supported python list.
  */
-class PythonList extends \ArrayObject {
+class PythonList extends \PHPPython\Object\PythonObject {
 
     public function __toString () {
         $values = $this->getArrayCopy();
@@ -21,10 +22,6 @@ class PythonList extends \ArrayObject {
         return $buildString;
     }
 
-    public function getAttr ($callee) {
-        return new \PHPPython\Object\Attr\PythonList($this, $callee);
-    }
-
     private function _buildString ($value) {
         if (is_array($value) || $value instanceof \ArrayObject) {
             return '[' . $this->_buildString($value) . ']';
@@ -32,6 +29,8 @@ class PythonList extends \ArrayObject {
             $value = '\'<resource: ' . get_resource_type($value) . '>\'';
         } else if (is_object($value)) {
             $value = '\'<object: ' . get_class($value) . '>\'';
+        } else if (is_string($value)) {
+            $value = '\'' . addcslashes($value, '\'') . '\'';
         }
         return $value;
     }

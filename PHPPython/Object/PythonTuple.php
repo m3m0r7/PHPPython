@@ -1,12 +1,13 @@
 <?php
 
 namespace PHPPython\Object;
+require_once __DIR__  . '/PythonObject.php';
 require_once __DIR__ . '/Attr/' . basename(__FILE__);
 
 /**
  * This class supported python tuple.
  */
-class PythonTuple extends \ArrayObject {
+class PythonTuple extends \PHPPython\Object\PythonObject {
 
     public function __toString () {
         $values = $this->getArrayCopy();
@@ -19,10 +20,6 @@ class PythonTuple extends \ArrayObject {
         $buildString .= implode(', ', $build);
         $buildString .= ')';
         return $buildString;
-    }
-
-    public function getAttr ($callee) {
-        return new \PHPPython\Object\Attr\PythonTuple($this, $callee);
     }
 
     private function _buildString ($value) {

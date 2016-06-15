@@ -1,12 +1,13 @@
 <?php
 
 namespace PHPPython\Object;
+require_once __DIR__  . '/PythonObject.php';
 require_once __DIR__ . '/Attr/' . basename(__FILE__);
 
 /**
  * This class supported python dictionary.
  */
-class PythonDictionary extends \ArrayObject {
+class PythonDictionary extends \PHPPython\Object\PythonObject {
 
     public function __toString () {
         $values = $this->getArrayCopy();
@@ -19,10 +20,6 @@ class PythonDictionary extends \ArrayObject {
         $buildString .= implode(', ', $build);
         $buildString .= '}';
         return $buildString;
-    }
-
-    public function getAttr ($callee) {
-        return new \PHPPython\Object\Attr\PythonDictionary($this, $callee);
     }
 
     private function _buildString ($key, $value) {
