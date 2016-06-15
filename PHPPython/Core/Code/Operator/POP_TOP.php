@@ -7,6 +7,6 @@ class POP_TOP extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        \StackPool::pop();
+        array_pop($this->_stacks);
     }
 }

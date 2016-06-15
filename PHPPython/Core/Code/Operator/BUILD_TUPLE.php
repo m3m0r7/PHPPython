@@ -14,8 +14,8 @@ class BUILD_TUPLE extends \PHPPython\Code\Operator {
         $tuple = new \PHPPython\Object\PythonTuple();
 
         for ($i = 0; $i < $count; $i++) {
-            $tuple->append(\StackPool::pop());
+            $tuple->append(array_pop($this->_stacks));
         }
-        \StackPool::add($tuple);
+        $this->_stacks[] = $tuple;
     }
 }

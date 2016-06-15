@@ -8,4 +8,19 @@ require_once __DIR__ . '/../../Object/Attr.php';
  */
 class PythonList extends \PHPPython\Object\Attr {
 
+    public function append ($value) {
+
+    }
+
+    public function extend ($value) {
+
+    }
+
+    public function pop () {
+
+    }
+
+    public function reverse () {
+
+    }
 }

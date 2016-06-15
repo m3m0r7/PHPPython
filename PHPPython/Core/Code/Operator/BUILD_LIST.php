@@ -12,9 +12,9 @@ class BUILD_LIST extends \PHPPython\Code\Operator {
         $list = new \PHPPython\Object\PythonList();
 
         for ($i = 0; $i < $count; $i++) {
-            $list->append(\StackPool::pop());
+            $list->append(array_pop($this->_stacks));
         }
 
-        \StackPool::add($list);
+        $this->_stacks[] = $list;
     }
 }

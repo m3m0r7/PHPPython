@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../Object/Attr.php';
 /**
  * This class supported python Attr.
  */
-class Dictionary extends \PHPPython\Object\Attr {
+class PythonDictionary extends \PHPPython\Object\Attr {
 
     public function iteritems () {
         return $this->getParent();

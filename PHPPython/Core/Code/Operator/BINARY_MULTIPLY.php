@@ -7,6 +7,11 @@ class BINARY_MULTIPLY extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+
+        $rightOperand = array_pop($this->_stacks);
+        $leftOperand = array_pop($this->_stacks);
+
+        $this->_stacks[] = $leftOperand * $rightOperand;
+
     }
 }

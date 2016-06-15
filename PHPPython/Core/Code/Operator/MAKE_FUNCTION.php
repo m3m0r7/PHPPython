@@ -9,10 +9,15 @@ class MAKE_FUNCTION extends \PHPPython\Code\Operator {
     public function exec () {
         $argumentCount = $this->_binaryReader->readShort();
 
-        $function = \StackPool::current();
+        $arguments = [];
+        for ($i = 0; $i < $argumentCount; $i++) {
+            $arguments[] = array_pop($this->_stacks);
+        }
+
+        $function = array_pop($this->_stacks);
 
         // wrap invoker
-        \StackPool::add(new \PHPPython\Code\Invoker(new \PHPPython\Code($function)));
+        $this->_stacks[] = new \PHPPython\Code\Invoker(new \PHPPython\Code($function));
 
     }
 }

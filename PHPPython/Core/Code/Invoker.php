@@ -5,7 +5,6 @@ require_once __DIR__ . '/../../Enum/OpCode.php';
 require_once __DIR__ . '/../../Enum/OpCompare.php';
 require_once __DIR__ . '/../../Exception/OpCodeException.php';
 require_once __DIR__ . '/Operator.php';
-require_once __DIR__ . '/StackPool.php';
 require_once __DIR__ . '/BuiltInFunction.php';
 
 class Invoker {
@@ -39,7 +38,7 @@ class Invoker {
 
         $opcode = new \PHPPython\Enum\OpCode();
         $blockStacks = [];
-
+        $stacks = [];
         $codes = [];
         $startTimestamp = microtime(true);
 
@@ -55,14 +54,14 @@ class Invoker {
                 $this->debug();
                 throw new \PHPPython\Exception\OpCodeException('Not implement mnemonic_name(' . sprintf('0x%04X', $readOpCode) . ').');
             }
-            var_dump($mnemonic);
+
             $mnemonicFile = '\\PHPPython\\Code\\Operator\\' . $mnemonic;
 
             $codes[] = [
                 $binaryReader->position(),
                 $readOpCode,
                 $mnemonic,
-                \StackPool::size(),
+                sizeof($stacks),
                 sizeof($blockStacks),
                 $mnemonicFile
             ];
@@ -76,7 +75,7 @@ class Invoker {
             }
 
             // exec operator
-            $returnValue = (new $mnemonicFile($this, $blockStacks, $binaryReader))->exec();
+            $returnValue = (new $mnemonicFile($this, $stacks, $blockStacks, $binaryReader))->exec();
 
             if ($readOpCode === \PHPPython\Enum\OpCode::RETURN_VALUE) {
                 $this->_invokedOpCodes[] = [

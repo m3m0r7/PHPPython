@@ -7,7 +7,7 @@ class PRINT_ITEM extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        $value = \StackPool::pop();
+        $value = array_pop($this->_stacks);
         echo $value;
     }
 }

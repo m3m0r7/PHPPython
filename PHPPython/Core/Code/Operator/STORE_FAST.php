@@ -7,6 +7,8 @@ class STORE_FAST extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        throw new \PHPPython\Exception\CodeException('Not implement "' . __CLASS__ . '"');
+        $address = $this->_binaryReader->readShort();
+        $value = array_pop($this->_stacks);
+        $this->_invoker->getCodeObject()->storeVarnamehashes($address, $value);
     }
 }

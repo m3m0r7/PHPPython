@@ -9,6 +9,6 @@ class LOAD_FAST extends \PHPPython\Code\Operator {
     public function exec () {
         $address = $this->_binaryReader->readShort();
         $name = $this->_invoker->getCodeObject()->varnames[$address];
-        \StackPool::add($this->_invoker->getCodeObject()->varnamehashes[$name]);
+        $this->_stacks[] = $this->_invoker->getCodeObject()->varnamehashes[$name];
     }
 }

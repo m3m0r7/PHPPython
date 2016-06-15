@@ -7,12 +7,12 @@ class GET_ITER extends \PHPPython\Code\Operator {
      * @return ?
      */
     public function exec () {
-        $value = \StackPool::pop();
+        $value = array_pop($this->_stacks);
 
         // if not implemented Iterator, wrap ArrayIterator.
         if (!is_object($value) || !in_array('Iterator', class_implements($value, false))) {
             $value =  new \ArrayIterator($value);
         }
-        \StackPool::add($value);
+        $this->_stacks[] = $value;
     }
 }

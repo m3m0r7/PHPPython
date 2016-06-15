@@ -8,11 +8,11 @@ class UNPACK_SEQUENCE extends \PHPPython\Code\Operator {
      */
     public function exec () {
         $sequences = $this->_binaryReader->readShort();
-        $value = \StackPool::pop();
+        $value = array_pop($this->_stacks);
         $sequenceData = str_split($value, ceil(strlen($value) / $sequences));
 
         while (($value = array_pop($sequenceData)) !== null) {
-            \StackPool::add($value);
+            $this->_stacks[] = $value;
         }
 
     }
